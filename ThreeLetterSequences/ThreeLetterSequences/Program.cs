@@ -12,35 +12,56 @@ namespace ThreeLetterSequences
     {
         static void Main(string[] args)
         {
-            String s = System.IO.File.ReadAllText("SampleText.txt");
-            Dictionary<string
-                , int> dict = TLS(s);
+            String theText = File.ReadAllText("SampleText.txt");
+            Dictionary<string, int> dict = TLS(theText);
             string a = "pre";
             int count = dict[a];
             Console.WriteLine(count);
-
-            
         }
 
-        static int traCounter(string s)
+        static Dictionary<string, int> TLS(string theText)
         {
-            
-            Regex rx = new Regex("(t)",RegexOptions.IgnoreCase);
-            MatchCollection matches = rx.Matches(s);
-            return matches.Count;
-            
+
+            Dictionary<string, int> TLS = new Dictionary<string, int>();
+            string pattern = @"(\w(?=(\w)(\w)))";
+
+            Regex rx = new Regex(pattern, RegexOptions.IgnoreCase);
+            MatchCollection matches = Regex.Matches(theText, pattern);
+
+            foreach (Match match in matches)
+            {
+                string tLS ="";
+                for (int i = 1; i < match.Groups.Count+1; i++)
+                {
+                    tLS += match.Groups[i].ToString();
+                }               
+                tLS = tLS.ToLower();
+
+                if (TLS.ContainsKey(tLS))
+                {
+                    TLS[tLS]++;
+                }
+                else
+                {
+                    TLS.Add(tLS, 1);
+                }
+            }
+            return TLS;
         }
-        
-        static Dictionary<string,int> TLS(string s)
+
+
+
+        static Dictionary<string, int> TLSold(string s)
         {
             Dictionary<string, int> dict = new Dictionary<string, int>();
-            Regex rx = new Regex(@"(\w(?=\w\w))", RegexOptions.IgnoreCase);
-            
-            MatchCollection matches = rx.Matches(s);
-            foreach(Match match in matches)
+            string pattern = @"(\w(?=\w\w))";
+            Regex rx = new Regex(pattern, RegexOptions.IgnoreCase);
+            MatchCollection matches = Regex.Matches(s, pattern);
+
+            foreach (Match match in matches)
             {
+
                 string tLS = s.Substring(match.Index, 3);
-                
                 tLS = tLS.ToLower();
                 if (dict.ContainsKey(tLS))
                 {
@@ -50,12 +71,10 @@ namespace ThreeLetterSequences
                 {
                     dict.Add(tLS, 1);
                 }
-                
-                
             }
             return dict;
-
         }
+
 
     }
 }
