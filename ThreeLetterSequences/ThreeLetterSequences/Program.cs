@@ -21,8 +21,8 @@ namespace ThreeLetterSequences
 
         static int traCounter(string s)
         {
-            int counter = 0;
-            Regex rx = new Regex("(tra)");
+            
+            Regex rx = new Regex("(tra)",RegexOptions.IgnoreCase);
             MatchCollection matches = rx.Matches(s);
             return matches.Count;
             
