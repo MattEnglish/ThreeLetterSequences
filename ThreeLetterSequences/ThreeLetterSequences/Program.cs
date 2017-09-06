@@ -13,8 +13,11 @@ namespace ThreeLetterSequences
         static void Main(string[] args)
         {
             String s = System.IO.File.ReadAllText("SampleText.txt");
-            int traCount = traCounter(s);
-            Console.WriteLine(traCount);
+            Dictionary<string
+                , int> dict = TLS(s);
+            string a = "pre";
+            int count = dict[a];
+            Console.WriteLine(count);
 
             
         }
@@ -22,12 +25,37 @@ namespace ThreeLetterSequences
         static int traCounter(string s)
         {
             
-            Regex rx = new Regex("(tra)",RegexOptions.IgnoreCase);
+            Regex rx = new Regex("(t)",RegexOptions.IgnoreCase);
             MatchCollection matches = rx.Matches(s);
             return matches.Count;
             
         }
         
+        static Dictionary<string,int> TLS(string s)
+        {
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            Regex rx = new Regex(@"(\w(?=\w\w))", RegexOptions.IgnoreCase);
+            
+            MatchCollection matches = rx.Matches(s);
+            foreach(Match match in matches)
+            {
+                string tLS = s.Substring(match.Index, 3);
+                
+                tLS = tLS.ToLower();
+                if (dict.ContainsKey(tLS))
+                {
+                    dict[tLS]++;
+                }
+                else
+                {
+                    dict.Add(tLS, 1);
+                }
+                
+                
+            }
+            return dict;
+
+        }
 
     }
 }
